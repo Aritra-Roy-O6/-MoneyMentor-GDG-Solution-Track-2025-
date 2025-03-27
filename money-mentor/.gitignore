@@ -24,3 +24,5 @@ yarn-error.log*
 
 # API keys and sensitive information
 src/config/api-keys.js
+
+.env
