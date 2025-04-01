@@ -1,15 +1,20 @@
 "use client"
-import { useContext } from "react"
+import { useEffect, useContext } from "react"
 import "./home.css"
 import Navbar from "./Navbar"
 import { LanguageContext } from "./LanguageContext"
 
+
 function Home({ onLogout, onPageChange, currentPage }) {
   const { translate } = useContext(LanguageContext)
+  useEffect(() => {
+    document.title = "MoneyMentor";
+  }, []);
 
   return (
     <div className="page-wrapper">
       <Navbar onLogout={onLogout} onPageChange={onPageChange} currentPage={currentPage} />
+      
 
       <div className="content-container">
         <div className="welcome-section">
@@ -35,29 +40,29 @@ function Home({ onLogout, onPageChange, currentPage }) {
                       stroke="#667eea"
                       strokeWidth="12"
                       strokeDasharray="339.3"
-                      strokeDashoffset="135.7"
+                      strokeDashoffset="339.3"
                       strokeLinecap="round"
                     />
                   </svg>
-                  <div className="progress-text">60%</div>
+                  <div className="progress-text">0%</div>
                 </div>
                 <div className="progress-details">
-                  <p>You're making great progress!</p>
-                  <p>3 of 5 modules completed</p>
+                  <p>Start learning everyday to see the progress!</p>
+                  <p>0 of 5 modules completed</p>
                 </div>
               </div>
               <div className="module-list">
-                <div className="module-item completed">
+                <div className="module-item">
                   <span className="module-name">Basics of Investing</span>
-                  <span className="module-status">Completed</span>
+                  <span className="module-status">Not Started</span>
                 </div>
-                <div className="module-item completed">
+                <div className="module-item">
                   <span className="module-name">Understanding Stocks</span>
-                  <span className="module-status">Completed</span>
+                  <span className="module-status">Not Started</span>
                 </div>
-                <div className="module-item completed">
+                <div className="module-item">
                   <span className="module-name">Mutual Funds 101</span>
-                  <span className="module-status">Completed</span>
+                  <span className="module-status">Not Started</span>
                 </div>
                 <div className="module-item">
                   <span className="module-name">Risk Management</span>
@@ -69,7 +74,7 @@ function Home({ onLogout, onPageChange, currentPage }) {
                 </div>
               </div>
               <button className="btn btn-primary" onClick={() => onPageChange("learn")}>
-                {translate("continue_learning")}
+                {translate("Start Learning!")}
               </button>
             </div>
           </div>
@@ -103,7 +108,7 @@ function Home({ onLogout, onPageChange, currentPage }) {
                     <span className="icon-circle purple">🏆</span>
                   </div>
                   <div className="notification-content">
-                    <p className="notification-text">You've completed the "Mutual Funds 101" module!</p>
+                    <p className="notification-text">Your target today is to complete the "Basics of Investing" module!</p>
                     <span className="notification-time">3 days ago</span>
                   </div>
                 </div>
@@ -193,8 +198,8 @@ function Home({ onLogout, onPageChange, currentPage }) {
                 </div>
                 <button className="btn btn-primary">Submit Answer</button>
                 <div className="quiz-stats">
-                  <span>Daily streak: 3 days</span>
-                  <span>Points earned: 450</span>
+                  <span>Daily streak: 0 days</span>
+                  <span>Points earned: 0</span>
                 </div>
               </div>
             </div>

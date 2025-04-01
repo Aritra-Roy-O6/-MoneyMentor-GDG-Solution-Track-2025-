@@ -4,6 +4,8 @@ import { useState, useEffect, useContext } from "react"
 import "./roadmap.css"
 import Navbar from "./Navbar"
 import { LanguageContext } from "./LanguageContext"
+import LoadingScreen from "./components/common/LoadingScreen";
+
 
 // Static data for roadmap steps
 const roadmapData = [
@@ -174,6 +176,7 @@ const roadmapData = [
 ]
 
 function Roadmap({ onLogout, onPageChange, currentPage }) {
+  const [loading, setLoading] = useState(true)
   const { translate } = useContext(LanguageContext)
   const [roadmap, setRoadmap] = useState(roadmapData)
   const [activeModule, setActiveModule] = useState(1)

@@ -1,5 +1,5 @@
 // src/Login.js
-import { useState } from "react";
+import { useState, useEffect  } from "react";
 import { loginUser, registerUser } from "./firebase/auth";
 import "./Login.css";
 import logo from "./logo513.png";
@@ -10,6 +10,9 @@ function Login({ onLogin }) {
   const [error, setError] = useState("");
   const [isSignup, setIsSignup] = useState(false);
   const [loading, setLoading] = useState(false);
+  useEffect(() => {
+    document.title = isSignup ? "MoneyMentor - Sign Up" : "MoneyMentor - Login";
+  }, [isSignup]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();

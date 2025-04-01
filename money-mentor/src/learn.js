@@ -1,11 +1,13 @@
 "use client"
 
-import { useContext } from "react"
+import { useContext, useState } from "react"
 import "./learn.css"
 import Navbar from "./Navbar"
 import { LanguageContext } from "./LanguageContext"
+import LoadingScreen from "./components/common/LoadingScreen";
 
 function Learn({ onLogout, onPageChange, currentPage }) {
+  const [loading, setLoading] = useState(true)
   const { translate } = useContext(LanguageContext)
 
   const videos = [

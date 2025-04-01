@@ -5,8 +5,10 @@ import "./feed.css"
 import Navbar from "./Navbar"
 import MarketUpdates from "./market-updates"
 import Gamification from "./gamification"
+import LoadingScreen from "./components/common/LoadingScreen";
 
 function Feed({ onLogout, onPageChange }) {
+  const [loading, setLoading] = useState(true)
   const [showGamification, setShowGamification] = useState(false)
 
   const posts = [
