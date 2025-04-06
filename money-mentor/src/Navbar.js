@@ -1,5 +1,4 @@
 "use client"
-
 import { useState, useRef, useEffect, useContext } from "react"
 import "./Navbar.css"
 import logo from "./logo192.png"

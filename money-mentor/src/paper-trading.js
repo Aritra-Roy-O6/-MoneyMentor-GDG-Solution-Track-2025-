@@ -1,3 +1,4 @@
+import React from 'react';
 import { useState, useEffect } from "react";
 import seedrandom from "seedrandom";
 import "./paper-trading.css";
@@ -180,8 +181,6 @@ function PaperTrading({ onLogout, onPageChange, currentPage }) {
   const [sortOrder, setSortOrder] = useState("newest");
 
   // State for market simulation
-  const [marketOpen, setMarketOpen] = useState(true);
-  const [marketStatus, setMarketStatus] = useState("Market is open");
   const [marketEvents, setMarketEvents] = useState([]);
   const [simulationSpeed, setSimulationSpeed] = useState("normal"); // slow, normal, fast
 
@@ -196,83 +195,50 @@ function PaperTrading({ onLogout, onPageChange, currentPage }) {
   useEffect(() => {
     if (!stocks.length) return;
 
-    // Check if market should be open
-    const checkMarketHours = () => {
-      const now = new Date();
-      const hours = now.getHours();
-      const minutes = now.getMinutes();
-      const day = now.getDay();
-
-      // Check if market is closed (weekends or outside trading hours)
-      const isWeekend = day === 0 || day === 6; // 0 = Sunday, 6 = Saturday
-      const isBeforeMarketHours = hours < 9 || (hours === 9 && minutes < 30);
-      const isAfterMarketHours = hours >= 16;
-
-      const isMarketOpen = !isWeekend && !isBeforeMarketHours && !isAfterMarketHours;
-
-      setMarketOpen(isMarketOpen);
-
-      if (isWeekend) {
-        setMarketStatus("Market is closed (Weekend)");
-      } else if (isBeforeMarketHours) {
-        setMarketStatus("Market opens at 9:30 AM");
-      } else if (isAfterMarketHours) {
-        setMarketStatus("Market closed at 4:00 PM");
-      } else {
-        setMarketStatus("Market is open");
-      }
-    };
-
-    checkMarketHours();
-    const marketCheckInterval = setInterval(checkMarketHours, 60000); // Check every minute
-
     // Set simulation interval based on speed
     let simulationInterval;
     let eventInterval;
 
-    if (marketOpen) {
-      // Determine interval duration based on simulation speed
-      let intervalDuration;
-      switch (simulationSpeed) {
-        case "slow":
-          intervalDuration = 60000; // 1 minute
-          break;
-        case "fast":
-          intervalDuration = 10000; // 10 seconds
-          break;
-        case "normal":
-        default:
-          intervalDuration = 30000; // 30 seconds
-      }
-
-      // Simulate price changes
-      simulationInterval = setInterval(() => {
-        setStocks((prevStocks) => simulateMarketData(prevStocks, 1));
-      }, intervalDuration);
-
-      // Generate random market events
-      eventInterval = setInterval(() => {
-        // 20% chance of generating an event each interval
-        if (Math.random() < 0.2) {
-          const newEvent = generateMarketEvent(stocks);
-          setMarketEvents((prev) => [newEvent, ...prev].slice(0, 10)); // Keep only the 10 most recent events
-
-          // Apply the event's impact to stock prices
-          setStocks((prevStocks) => applyMarketEvent(prevStocks, newEvent));
-        }
-      }, intervalDuration * 3); // Events occur less frequently than price updates
+    // Determine interval duration based on simulation speed
+    let intervalDuration;
+    switch (simulationSpeed) {
+      case "slow":
+        intervalDuration = 60000; // 1 minute
+        break;
+      case "fast":
+        intervalDuration = 10000; // 10 seconds
+        break;
+      case "normal":
+      default:
+        intervalDuration = 30000; // 30 seconds
     }
+
+    // Simulate price changes
+    simulationInterval = setInterval(() => {
+      setStocks((prevStocks) => simulateMarketData(prevStocks, 1));
+    }, intervalDuration);
+
+    // Generate random market events
+    eventInterval = setInterval(() => {
+      // 20% chance of generating an event each interval
+      if (Math.random() < 0.2) {
+        const newEvent = generateMarketEvent(stocks);
+        setMarketEvents((prev) => [newEvent, ...prev].slice(0, 10)); // Keep only the 10 most recent events
+
+        // Apply the event's impact to stock prices
+        setStocks((prevStocks) => applyMarketEvent(prevStocks, newEvent));
+      }
+    }, intervalDuration * 3); // Events occur less frequently than price updates
 
     // Update portfolio value when stocks change
     const totalValue = calculatePortfolioValue();
     setPortfolio((prev) => ({ ...prev, totalValue }));
 
     return () => {
-      clearInterval(marketCheckInterval);
       clearInterval(simulationInterval);
       clearInterval(eventInterval);
     };
-  }, [stocks, marketOpen, simulationSpeed]);
+  }, [stocks, simulationSpeed]);
 
   // Filter stocks based on search term
   const filteredStocks = stocks.filter(
@@ -590,8 +556,8 @@ function PaperTrading({ onLogout, onPageChange, currentPage }) {
         </div>
 
         <div className="market-status-bar">
-          <div className={`status-indicator ${marketOpen ? "open" : "closed"}`}></div>
-          <span className="status-text">{marketStatus}</span>
+          <div className="status-indicator open"></div>
+          <span className="status-text">Market is open</span>
           <span className="market-time">{new Date().toLocaleTimeString()}</span>
 
           <div className="simulation-controls">
@@ -1278,21 +1244,8 @@ function PaperTrading({ onLogout, onPageChange, currentPage }) {
 
 // Market simulation functions
 function simulateMarketData(stocks, volatilityFactor = 1) {
-  // Get current time to determine if market should be open
+  // Get current time for seeding
   const now = new Date();
-  const hours = now.getHours();
-  const minutes = now.getMinutes();
-  const day = now.getDay();
-
-  // Check if market is closed (weekends or outside trading hours)
-  const isWeekend = day === 0 || day === 6; // 0 = Sunday, 6 = Saturday
-  const isBeforeMarketHours = hours < 9 || (hours === 9 && minutes < 30);
-  const isAfterMarketHours = hours >= 16;
-
-  // If market is closed, return stocks unchanged
-  if (isWeekend || isBeforeMarketHours || isAfterMarketHours) {
-    return stocks;
-  }
 
   // Market trend factor (simulates overall market direction)
   // Changes slowly over time to simulate market cycles

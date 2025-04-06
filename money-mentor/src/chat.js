@@ -5,8 +5,10 @@ import "./chat.css"
 import Navbar from "./Navbar"
 import { sendMessageStream, resetChatSession } from "./utils/gemini-api"
 import { LanguageContext } from "./LanguageContext"
+import LoadingScreen from "./components/common/LoadingScreen";
 
 function Chat({ onLogout, onPageChange }) {
+  const [loading, setLoading] = useState(true)
   const [messages, setMessages] = useState([
     {
       id: 1,

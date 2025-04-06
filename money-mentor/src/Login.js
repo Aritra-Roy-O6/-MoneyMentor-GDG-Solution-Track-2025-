@@ -1,50 +1,51 @@
-// src/Login.js
-import { useState } from "react";
-import { loginUser, registerUser } from "./firebase/auth";
-import "./Login.css";
-import logo from "./logo513.png";
+"use client"
+
+import { useState } from "react"
+import { loginUser, registerUser } from "./firebase/auth"
+import "./Login.css"
+import logo from "./logo513.png"
 
 function Login({ onLogin }) {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
-  const [isSignup, setIsSignup] = useState(false);
-  const [loading, setLoading] = useState(false);
+  const [email, setEmail] = useState("")
+  const [password, setPassword] = useState("")
+  const [error, setError] = useState("")
+  const [isSignup, setIsSignup] = useState(false)
+  const [loading, setLoading] = useState(false)
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    setError("");
-    setLoading(true);
+    e.preventDefault()
+    setError("")
+    setLoading(true)
 
     try {
-      let result;
-      
+      let result
+
       if (isSignup) {
         // Register new user
-        result = await registerUser(email, password);
+        result = await registerUser(email, password)
       } else {
         // Login existing user
-        result = await loginUser(email, password);
+        result = await loginUser(email, password)
       }
 
       if (result.success) {
-        onLogin();
+        onLogin()
       } else {
-        setError(result.error);
+        setError(result.error)
       }
     } catch (error) {
-      setError("Authentication failed. Please try again.");
-      console.error(error);
+      setError("Authentication failed. Please try again.")
+      console.error(error)
     }
 
-    setLoading(false);
-  };
+    setLoading(false)
+  }
 
   return (
     <div className="login-container">
       <div className="login-card">
         <div className="login-header">
-          <img src={logo || "/placeholder.svg"} className="login-logo" alt="logo" />
+          <img src={logo || "/placeholder.svg?height=64&width=64"} className="login-logo" alt="logo" />
         </div>
 
         <form className="login-form" onSubmit={handleSubmit}>
@@ -74,8 +75,8 @@ function Login({ onLogin }) {
             />
           </div>
 
-          <button type="submit" className="login-button" disabled={loading}>
-            {loading ? "Processing..." : isSignup ? "Sign Up" : "Log In"}
+          <button type="submit" className="login-button">
+            {loading ? "Loading..." : isSignup ? "Sign Up" : "Log In"}
           </button>
         </form>
 
@@ -86,10 +87,12 @@ function Login({ onLogin }) {
               {isSignup ? "Log In" : "Sign Up"}
             </span>
           </p>
+          <span>It shows an error when you sign up, it's a bug we're trying to fix it asap. Don't worry, you're signed up. Just go to login and click login</span>
         </div>
       </div>
     </div>
-  );
+  )
 }
 
-export default Login;
+export default Login
+

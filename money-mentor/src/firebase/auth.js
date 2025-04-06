@@ -7,7 +7,7 @@ import {
   onAuthStateChanged,
 } from "firebase/auth"
 import { doc, setDoc, getDoc } from "firebase/firestore"
-import { auth, db } from "./firebase"
+import { auth, db } from "../firebase/firebase"
 
 // Register a new user
 export const registerUser = async (email, password, displayName) => {
@@ -28,6 +28,7 @@ export const registerUser = async (email, password, displayName) => {
       holdings: [],
       transactions: [],
       watchlist: [],
+      roadmapProgress: {}
     })
 
     return { success: true, user }

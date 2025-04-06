@@ -3,8 +3,10 @@
 import { useState } from "react"
 import "./community.css"
 import Navbar from "./Navbar"
+import LoadingScreen from "./components/common/LoadingScreen";
 
 function Community({ onLogout, onPageChange }) {
+  const [loading, setLoading] = useState(true)
   const [posts, setPosts] = useState([
     {
       id: 1,
