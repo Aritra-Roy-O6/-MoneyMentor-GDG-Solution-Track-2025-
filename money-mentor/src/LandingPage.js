@@ -1,11 +1,16 @@
 "use client"
-import React from "react";
+import React, { useEffect } from "react";
 import "./LandingPage.css";
 // Make sure your logo is correctly imported
 import logo from "./logo192.png";
 import logo1 from "./logo513.png";
 
 function LandingPage({ onGetStarted }) {
+  // Set document title when component mounts
+  useEffect(() => {
+    document.title = "MoneyMentor";
+  }, []);
+
   // This function will handle navigation to the login page
   const handleGetStarted = (e) => {
     e.preventDefault();
